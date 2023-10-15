@@ -5,10 +5,12 @@ http://gamebox1.reply.it/web1-f1103cad4b0542c69e23b267e173799295c4f217/
 
 Loading up burp and browsing to the given URL, we can observe a game where we move sideways to collect goats. Each red goat is -2000 points, each green goat is +2000 points.
 Goal is to obtain at least 65536 points, which is already a good hint that this might have something to do with 16bit int overflows.
+
 ![](./Images/goat_game.png)
 
 
 Burp reveals the API requests for each type of goat.
+
 ![](./Images/red.png)![](./Images/green.png)
 
 Important to note that there are positive and negative scores contributing to the total score, and that the current score status is kept in the cookie.

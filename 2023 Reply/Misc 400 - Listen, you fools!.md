@@ -24,7 +24,7 @@ Duration                        : 0:02:09
 ```
 
 Loading it into Audacity, and opening spectrogram view we get:
-![[Pasted image 20231014205644.png]]
+![](./Images/spectra.png)
 
 Which ordered translates to:
 ```
@@ -42,7 +42,7 @@ The wikimedia International Morse Code page mentions
 So we take this as rule at this point.
 
 Looking closer at the beginning of the wav file we notice some harsh noise that appears to have some strange patterns:
-![[Pasted image 20231014205928.png]]
+![](./Images/analog.png)
 
 This seems to match the morse code patterns above, with blocks of 3 and 7 units, so we interpreted it as morse code based on this. Loading the wav file into python and analyzing each channel independently:
 
